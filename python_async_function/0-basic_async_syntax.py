@@ -1,4 +1,7 @@
 #!/usr/bin/env python3
+"""
+Shove your comments up your arse
+"""
 
 import asyncio
 import random
