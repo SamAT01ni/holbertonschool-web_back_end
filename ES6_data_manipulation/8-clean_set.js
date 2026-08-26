@@ -3,8 +3,11 @@ export default function cleanSet(set, startString) {
     .filter((item) => item.startsWith(startString))
     .map((item) => item.slice(startString.length));
 
-  if (!startString || typeof startString !== 'string') {
+  if (startString === '') {
     return '';
+  }
+  if (typeof startString !== 'string') {
+    throw new TypeError('Must be string');
   }
   return values.join('-');
 }
