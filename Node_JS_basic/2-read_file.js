@@ -4,7 +4,7 @@ const countStudents = (path) => {
   try {
     const file = fs.readFileSync(path, 'utf-8');
     const cleanFile = file.split('\n').slice(1);
-    const validStudents = cleanFile.filter((value) => value.trim() !== '');
+    const validStudents = cleanFile.filter((value) => value !== '');
     const cleanValidStudents = validStudents.map((value) => value.trim());
     const studentsArray = cleanValidStudents.map((value) => value.split(','));
 
@@ -24,9 +24,7 @@ const countStudents = (path) => {
 
     keys.forEach((key) => {
       const studentsCount = students[key].length;
-      console.log(
-        `Number of students in ${key}: ${studentsCount}. List: ${students[key].join(', ')}`
-      );
+      console.log(`Number of students in ${key}: ${studentsCount}. List: ${students[key].join(', ')}`);
     });
   } catch (error) {
     throw new Error('Cannot load the database');
