@@ -1,34 +1,41 @@
-const fs = require('fs'); 
+const fs = require('fs');
 
-const countStudents = (path) => new Promise((resolve, reject) => {
-    fs.readFile(path, 'utf-8', (err, data) => {
-        if (err) {
-            reject(new Error('Cannot load the database'));
-            return;
+function countStudents(path) {
+  return new Promise((resolve, reject) => {
+    fs.readFile(path, 'utf8', (error, data) => {
+      if (error) {
+        reject(new Error('Cannot load the database'));
+        return;
+      }
+
+      const lines = data.split('\n').filter((line) => line.trim() !== '');
+      const students = lines.slice(1);
+
+      console.log(`Number of students: ${students.length}`);
+
+      const fields = {};
+
+      students.forEach((student) => {
+        const values = student.split(',');
+        const firstName = values[0];
+        const field = values[3].trim();
+
+        if (!fields[field]) {
+          fields[field] = [];
         }
-        const cleanFile = data.split('\n').slice(1);
-        const validStudents = cleanFile.filter((value) => value !== '');
-        const cleanValidStudents = validStudents.map((value) => value.trim());
-        const studentsArray = cleanValidStudents.map((value) => value.split(','));
-        console.log(`Number of students: ${studentsArray.length}`);
 
-        const students = studentsArray.reduce((accumulator, student) => {
-            if (accumulator[student[3]]) {
-                accumulator[student[3]].push(student[0]);
-            } else {
-                accumulator[student[3]] = [student[0]];
-            }
-            return accumulator;
-        }, {});
+        fields[field].push(firstName);
+      });
 
-        const keys = Object.keys(students);
+      Object.keys(fields).forEach((field) => {
+        console.log(
+          `Number of students in ${field}: ${fields[field].length}. List: ${fields[field].join(', ')}`,
+        );
+      });
 
-        keys.forEach((key) => {
-            const studentsCount = students[key].length;
-            console.log(`Number of students in ${key}: ${studentsCount}. List: ${students[key].join(', ')}`);
-        });
-        resolve();
+      resolve();
     });
-});
+  });
+}
 
 module.exports = countStudents;
