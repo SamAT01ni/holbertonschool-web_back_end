@@ -6,21 +6,21 @@ const countStudents = (path) => {
     const lines = data.split('\n').filter((line) => line.trim() !== '');
     const students = lines.slice(1);
     console.log(`Number of students: ${students.length}`);
-    const headers = {};
+    const fields = {};
     students.forEach((student) => {
       const parts = student.split(',');
       const name = parts[0];
-      const header = parts[3];
+      const field = parts[3];
 
-      if (!headers[header]) {
-        headers[header] = [];
+      if (!fields[field]) {
+        fields[field] = [];
       }
-      headers[header].push(name);
+      fields[field].push(name);
     });
 
-    Object.keys(headers).forEach((header) => {
+    Object.keys(fields).forEach((field) => {
       console.log(
-        `Number of students in ${header}: ${headers[header].length}. List: ${headers[header].join(', ')}`
+        `Number of students in ${field}: ${fields[field].length}. List: ${fields[field].join(', ')}`
       );
     });
   } catch (error) {
