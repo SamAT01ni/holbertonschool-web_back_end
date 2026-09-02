@@ -2,25 +2,30 @@ const fs = require('fs');
 
 const countStudents = (path) => {
   try {
-    const data = fs.readFileSync(path, 'utf-8');
-    const lines = data.split('\n').filter((line) => line.trim() !== '');
-    const students = lines.slice(1);
-    console.log(`Number of students: ${students.length}`);
-    const fields = {};
-    students.forEach((student) => {
-      const parts = student.split(',');
-      const name = parts[0];
-      const field = parts[3];
+    const file = fs.readFileSync(path, 'utf-8');
+    const cleanFile = file.split('\n').slice(1);
+    const validStudents = cleanFile.filter((value) => value.trim() !== '');
+    const cleanValidStudents = validStudents.map((value) => value.trim());
+    const studentsArray = cleanValidStudents.map((value) => value.split(','));
 
-      if (!fields[field]) {
-        fields[field] = [];
+    const c = studentsArray.length;
+    console.log(`Number of students: ${c}`);
+
+    const students = studentsArray.reduce((accumulator, student) => {
+      if (accumulator[student[3]]) {
+        accumulator[student[3]].push(student[0]);
+      } else {
+        accumulator[student[3]] = [student[0]];
       }
-      fields[field].push(name);
-    });
+      return accumulator;
+    }, {});
 
-    Object.keys(fields).forEach((field) => {
+    const keys = Object.keys(students);
+
+    keys.forEach((key) => {
+      const studentsCount = students[key].length;
       console.log(
-        `Number of students in ${field}: ${fields[field].length}. List: ${fields[field].join(', ')}`
+        `Number of students in ${key}: ${studentsCount}. List: ${students[key].join(', ')}`
       );
     });
   } catch (error) {
